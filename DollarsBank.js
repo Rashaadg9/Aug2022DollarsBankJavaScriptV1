@@ -102,4 +102,4 @@ function deposit()
         user.cash += newDeposit;
         console.log("Your new balance is: $", user.cash);
     }
-}
+}// Test
