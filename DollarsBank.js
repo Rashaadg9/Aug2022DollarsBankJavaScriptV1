@@ -13,7 +13,17 @@ class User
         this.cash = cash;
     }
 }
-let user = new User(1, "Rashaad", "Gray", "rgray", "password", "0123", 100.00);
+class Transaction
+{
+    constructor(id, type, amount)
+    {
+        this.id = id;
+        this.type = type;
+        this.amount = amount;
+    }
+}
+const transactions = [ new Transaction(1, "deposit", 100.00), new Transaction(2, "deposit", 200.00), new Transaction(1, "deposit", 100.05) ];
+let user = new User(1, "Rashaad", "Gray", "rgray", "password", "0123", 200.05);
 console.log("DOLLARSBANK ATM WELCOMES YOU!!!");
 loginMenu();
 main();
@@ -33,12 +43,10 @@ function main()
                 console.log("Your current balance: $" + user.cash);
                 break;
             case "2":
-                console.log("Transactions TBD");
+                printTransactions();
                 break;
             case "3":
-                console.log(user.pin);
                 pinUpdate();
-                console.log(user.pin);
                 break;
             case "4":
                 withdraw();
@@ -143,4 +151,14 @@ function pinUpdate()
     {
         console.log("INVALID PIN!!!");
     }
+}
+
+function printTransactions()
+{
+    transactions.forEach(t => {
+        if(t.id == user.id )
+        {
+            console.log("Category:", t.type, "Amount: $" + t.amount)
+        }
+    });
 }
