@@ -30,7 +30,6 @@ let user = new User();
 let loggedIn = false;
 console.log("DOLLARSBANK ATM WELCOMES YOU!!!");
 startMenu();
-main();
 
 function main()
 {
@@ -65,39 +64,47 @@ function main()
             case "6":
                 accInfo();
                 break;
-            case "E":
-            case "e":
+            case "X":
+            case "x":
                 run = false;
+                user = new User();
+                loggedIn = false;
+                console.log("... Signing Out ...");
                 break;
             default:
                 console.log("... invalid option ...");
         }
     }
-    console.log("... Exiting System ...");
 }
 
 function startMenu()
 {
-
-    while (loggedIn != true)
+    let exit = false;
+    while (exit == false)
     {
-        console.log("1) login");
-        console.log("2) Exit");
-        option = prompt("Choice: ");
-
-        switch (option)
+        while (loggedIn != true)
         {
+            console.log("1) login");
+            console.log("2) Exit");
+            option = prompt("Choice: ");
+
+            switch (option)
+            {
             case "1":
                 logInMenu();
                 break;
             case "2":
                 run = false
                 loggedIn = true;
+                exit = true;
                 break;
             default:
                 //
         }
+        }
+        main();
     }
+    console.log("... Exiting System ...");
 
 }
 
@@ -114,6 +121,7 @@ function logInMenu()
             {
                 loggedIn = true;
                 setUser(u.id);
+                run = true;
                 return;
             }
             else
@@ -146,7 +154,7 @@ function mainMenu()
     console.log("4) Withdraw Amount");
     console.log("5) Deposit Amount");
     console.log("6) Display Account Information");
-    console.log("E) Exit");
+    console.log("X) LogOut");
 }
 
 function deposit()
