@@ -24,8 +24,8 @@ class Transaction
         
     }
 }
-const transactions = [ new Transaction(1, "deposit", 100.00) ];
-const users = [new User(1, "Rashaad", "Gray", "rgray", "password", "0123", 100.00) ];
+const transactions = [ new Transaction(1, "deposit", 100.00), new Transaction(2, "deposit", 200.00) ];
+const users = [new User(1, "Rashaad", "Gray", "rgray", "password", "0123", 100.00), new User(2, "John", "Doe", "jdoe", "pass", "1234", 200.00) ];
 let user = new User();
 let loggedIn = false;
 console.log("DOLLARSBANK ATM WELCOMES YOU!!!");
@@ -63,6 +63,9 @@ function main()
                 break;
             case "6":
                 accInfo();
+                break;
+            case "7":
+                transferFunds();
                 break;
             case "X":
             case "x":
@@ -154,6 +157,7 @@ function mainMenu()
     console.log("4) Withdraw Amount");
     console.log("5) Deposit Amount");
     console.log("6) Display Account Information");
+    console.log("7) Transfer Funds");
     console.log("X) LogOut");
 }
 
@@ -168,7 +172,7 @@ function deposit()
     {
         user.cash += newDeposit;
         console.log("Your new balance is: $" + user.cash);
-        updateTransactions("deposit", newDeposit);
+        updateTransactions(user.id, "deposit", newDeposit);
     }
 }
 
@@ -183,7 +187,7 @@ function withdraw()
     {
         user.cash -= amount;
         console.log("Your new balance is: $" + user.cash);
-        updateTransactions("withdraw", amount);
+        updateTransactions(user.id, "withdraw", amount);
     }
 }
 
@@ -228,9 +232,9 @@ function printTransactions()
     }
 }
 
-function updateTransactions(type, amount)
+function updateTransactions(id, type, amount)
 {
-    transactions.push(new Transaction(user.id, type, amount));
+    transactions.push(new Transaction(id, type, amount));
 }
 
 function accInfo()
@@ -240,4 +244,28 @@ function accInfo()
     console.log("Username:  ", userName)
     console.log("PIN:       ", user.pin)
     console.log("Balance:   ", user.cash)
+}
+
+function transferFunds()
+{
+    let other =  prompt("Username to transfer to: ");
+    users.forEach(u => {
+        if(u.userName.toLowerCase() == other.toLowerCase())
+        {
+            console.log("other:", other);
+            var transfer = parseFloat(prompt("Amount to transfer: $"));
+            if (transfer > user.cash  || transfer < 0)
+            {
+                console.log("Transfer can't be more than whats in account ($" + user.cash + ") or Negative");
+            }
+            else
+            {
+                user.cash -= transfer;
+                u.cash += transfer
+                console.log("Your new balance is: $" + user.cash);
+                updateTransactions(user.id, "transfered", transfer);
+                updateTransactions(u.id, "recived", transfer);
+            }
+        }
+    });
 }
