@@ -23,15 +23,22 @@ class Transaction
     }
 }
 const transactions = [ new Transaction(1, "deposit", 100.00) ];
-let user = new User(1, "Rashaad", "Gray", "rgray", "password", "0123", 100.00);
+const users = [new User(1, "Rashaad", "Gray", "rgray", "password", "0123", 100.00) ];
+let user = new User();
+let loggedIn = false;
 console.log("DOLLARSBANK ATM WELCOMES YOU!!!");
-loginMenu();
+startMenu();
 main();
 
 function main()
 {
     let option = 0;
-    console.log("Welcome ", user.firstName)
+    console.log("is:", user);
+    if (user.id != undefined)
+    {
+        console.log("Welcome ", user.firstName)
+    }
+
     while(run == true)
     {
         mainMenu();
@@ -65,9 +72,8 @@ function main()
     console.log("... Exiting System ...");
 }
 
-function loginMenu()
+function startMenu()
 {
-    var loggedIn = false;
 
     while (loggedIn != true)
     {
@@ -78,7 +84,7 @@ function loginMenu()
         switch (option)
         {
             case "1":
-                loggedIn = true;
+                logInMenu();
                 break;
             case "2":
                 run = false
@@ -89,6 +95,44 @@ function loginMenu()
         }
     }
 
+}
+
+function logInMenu()
+{
+    var count = 0;
+    userName = prompt("Enter username: ");
+    users.forEach(u => {
+        if(u.userName == userName )
+        {
+            userPassword = prompt("Enter password: ");
+            count = 1;
+            if (userPassword == u.password)
+            {
+                loggedIn = true;
+                setUser(u.id);
+                return;
+            }
+            else
+            {
+                console.log("Incorrect Password!!");
+            }
+        }
+    });
+    if (count == 0)
+    {
+        console.log("Incorrect username!!");
+    }
+}
+
+function setUser(id)
+{
+    users.forEach(u => {
+        if(u.id == id)
+        {
+            console.log("Returned:", u);
+            user = u;
+        }
+    });
 }
 
 function mainMenu()
