@@ -22,8 +22,8 @@ class Transaction
         this.amount = amount;
     }
 }
-const transactions = [ new Transaction(1, "deposit", 100.00), new Transaction(2, "deposit", 200.00), new Transaction(1, "deposit", 100.05) ];
-let user = new User(1, "Rashaad", "Gray", "rgray", "password", "0123", 200.05);
+const transactions = [ new Transaction(1, "deposit", 100.00) ];
+let user = new User(1, "Rashaad", "Gray", "rgray", "password", "0123", 100.00);
 console.log("DOLLARSBANK ATM WELCOMES YOU!!!");
 loginMenu();
 main();
@@ -112,6 +112,7 @@ function deposit()
     {
         user.cash += newDeposit;
         console.log("Your new balance is: $" + user.cash);
+        updateTransactions("deposit", newDeposit);
     }
 }
 
@@ -126,6 +127,7 @@ function withdraw()
     {
         user.cash -= amount;
         console.log("Your new balance is: $" + user.cash);
+        updateTransactions("withdraw", amount);
     }
 }
 
@@ -161,4 +163,9 @@ function printTransactions()
             console.log("Category:", t.type, "Amount: $" + t.amount)
         }
     });
+}
+
+function updateTransactions(type, amount)
+{
+    transactions.push(new Transaction(user.id, type, amount));
 }
