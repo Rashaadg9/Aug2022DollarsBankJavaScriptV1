@@ -29,7 +29,7 @@ function main()
         switch (option)
         {
             case "1":
-                console.log("Your current balance: ", user.cash);
+                console.log("Your current balance: $" + user.cash);
                 break;
             case "2":
                 console.log("Transactions TBD");
@@ -38,7 +38,7 @@ function main()
                 console.log("Update PIN TBD");
                 break;
             case "4":
-                console.log("Withdraw Amount TBD");
+                withdraw();
                 break;
             case "5":
                 deposit();
@@ -100,6 +100,20 @@ function deposit()
     else
     {
         user.cash += newDeposit;
-        console.log("Your new balance is: $", user.cash);
+        console.log("Your new balance is: $" + user.cash);
     }
-}// Test
+}
+
+function withdraw()
+{
+    var amount = parseFloat(prompt("Amount to withdraw: $"));
+    if (amount > user.cash )
+    {
+        console.log("withdraw can't be more than whats in account ($" + user.cash + ")");
+    }
+    else
+    {
+        user.cash -= amount;
+        console.log("Your new balance is: $" + user.cash);
+    }
+}
