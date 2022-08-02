@@ -2,17 +2,18 @@ const prompt = require("prompt-sync")();
 let run = true;
 class User
 {
-    constructor(id, firstName, lastName, userName, password, cash)
+    constructor(id, firstName, lastName, userName, password, pin, cash)
     {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
         this.password = password;
+        this.pin = pin;
         this.cash = cash;
     }
 }
-let user = new User(1, "Rashaad", "Gray", "rgray", "password", 100.00);
+let user = new User(1, "Rashaad", "Gray", "rgray", "password", "0123", 100.00);
 console.log("DOLLARSBANK ATM WELCOMES YOU!!!");
 loginMenu();
 main();
@@ -35,7 +36,9 @@ function main()
                 console.log("Transactions TBD");
                 break;
             case "3":
-                console.log("Update PIN TBD");
+                console.log(user.pin);
+                pinUpdate();
+                console.log(user.pin);
                 break;
             case "4":
                 withdraw();
@@ -115,5 +118,29 @@ function withdraw()
     {
         user.cash -= amount;
         console.log("Your new balance is: $" + user.cash);
+    }
+}
+
+function pinUpdate()
+{
+    var current = prompt("Enter current PIN: ");
+    if (current == user.pin)
+    {
+        const regEx = /^\d\d\d\d$/;
+        var newPin = prompt("Enter new PIN: ");
+        console.log(newPin.search(regEx));
+        if (newPin.search(regEx) == 0)
+        {
+            user.pin = newPin;
+            console.log("Pin update successful!");
+        }
+        else
+        {
+            console.log("Invalid format must match be 4-digit pin (ex. 0589)");
+        }
+    }
+    else
+    {
+        console.log("INVALID PIN!!!");
     }
 }
