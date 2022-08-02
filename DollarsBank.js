@@ -20,6 +20,8 @@ class Transaction
         this.id = id;
         this.type = type;
         this.amount = amount;
+        this.date = new Date();
+        
     }
 }
 const transactions = [ new Transaction(1, "deposit", 100.00) ];
@@ -33,7 +35,6 @@ main();
 function main()
 {
     let option = 0;
-    console.log("is:", user);
     if (user.id != undefined)
     {
         console.log("Welcome ", user.firstName)
@@ -60,6 +61,9 @@ function main()
                 break;
             case "5":
                 deposit();
+                break;
+            case "6":
+                accInfo();
                 break;
             case "E":
             case "e":
@@ -129,7 +133,6 @@ function setUser(id)
     users.forEach(u => {
         if(u.id == id)
         {
-            console.log("Returned:", u);
             user = u;
         }
     });
@@ -138,10 +141,11 @@ function setUser(id)
 function mainMenu()
 {
     console.log("1) Check Balance");
-    console.log("2) Print Transactions");
+    console.log("2) Print 5 recent Transactions");
     console.log("3) Update PIN");
     console.log("4) Withdraw Amount");
     console.log("5) Deposit Amount");
+    console.log("6) Display Account Information");
     console.log("E) Exit");
 }
 
@@ -182,7 +186,6 @@ function pinUpdate()
     {
         const regEx = /^\d\d\d\d$/;
         var newPin = prompt("Enter new PIN: ");
-        console.log(newPin.search(regEx));
         if (newPin.search(regEx) == 0)
         {
             user.pin = newPin;
@@ -201,15 +204,32 @@ function pinUpdate()
 
 function printTransactions()
 {
-    transactions.forEach(t => {
-        if(t.id == user.id )
+    var count = 0;
+    const t = transactions.slice().reverse();
+    for (let i = 0; i < t.length; i++)
+    {
+        if (t[i].id == user.id)
         {
-            console.log("Category:", t.type, "Amount: $" + t.amount)
+            count += 1;
+            console.log("TimeStamp: " + t[i].date, "| Category:", t[i].type, " | Amount: $" + t[i].amount);
+            if (count >= 5)
+            {
+                return;
+            }
         }
-    });
+    }
 }
 
 function updateTransactions(type, amount)
 {
     transactions.push(new Transaction(user.id, type, amount));
+}
+
+function accInfo()
+{
+    console.log("First Name:", user.firstName)
+    console.log("Last Name: ", user.lastName)
+    console.log("Username:  ", userName)
+    console.log("PIN:       ", user.pin)
+    console.log("Balance:   ", user.cash)
 }
