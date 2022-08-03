@@ -88,7 +88,8 @@ function startMenu()
         while (loggedIn != true)
         {
             console.log("1) login");
-            console.log("2) Exit");
+            console.log("2) SignUp");
+            console.log("3) Exit");
             option = prompt("Choice: ");
 
             switch (option)
@@ -97,6 +98,9 @@ function startMenu()
                 logInMenu();
                 break;
             case "2":
+                SignUpMenu();
+                break;
+            case "3":
                 run = false
                 loggedIn = true;
                 exit = true;
@@ -268,4 +272,66 @@ function transferFunds()
             }
         }
     });
+}
+
+function SignUpMenu()
+{
+    let pass = false;
+    var firstName =  prompt("Enter First Name: ");
+    var lastName =  prompt("Enter Last Name: ");
+    while (pass == false)
+    {
+        var userName =  prompt("Enter username: ");
+        pass = true;
+        users.forEach((u) => { if(u.userName.toLowerCase() == userName.toLowerCase()){ pass = false;
+            console.log("Username (" + userName + ") is already taken") } });
+    }
+    pass = false;
+    const regEx = /^ +$/;
+    while (pass == false)
+    {
+        var password =  prompt("Enter password: ");
+        if(password == "" || password.search(regEx) == 0)
+        {
+            console.log("password can't be empty");
+        }
+        else
+            pass = true;
+    }
+    pass = false;
+    pinRegEx = /^\d\d\d\d$/;
+    while (pass == false)
+    {
+        var newPin = prompt("Enter 4-digit PIN: ");
+        if (newPin.search(pinRegEx) == 0)
+        {
+            pass = true;
+        }
+        else
+        {
+            console.log("Invalid format must be 4-digit pin (ex. 0589)");
+        }
+    }
+    pass = false;
+    while (pass == false)
+    {
+        var newDeposit = parseFloat(prompt("Amount to deposit: $"));
+        if (newDeposit > 1.00 )
+        {
+            pass = true;
+        }
+        else
+        {
+            console.log("Deposit can't be less than $1.00");
+        }
+    }
+    let newUser = new User((users.slice().reverse()[0].id + 1), firstName, lastName, userName, password, newPin, newDeposit);
+    users.push(newUser);
+    if (users.slice().reverse()[0].id == newUser.id)
+    {
+        transactions.push( new Transaction(newUser.id, "deposit", newUser.cash) );
+        console.log("Account creation successful!!")
+    }
+    else
+        console.log("Error creation FAILED!!")
 }
