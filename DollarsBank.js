@@ -24,11 +24,25 @@ class Transaction
         
     }
 }
-const transactions = [ new Transaction(1, "deposit", 100.00), new Transaction(2, "deposit", 200.00) ];
+
+const Color =
+{
+    red: '\033[31;1m',
+    green: '\033[32;1m',
+    blue: '\033[34m',
+    yellow: '\033[33m',
+    magenta: '\033[35m',
+    cyan: '\033[36m',
+    white: '\033[37;1m',
+    whiteBackground: '\033[47;1m',
+    reset: '\033[0m'
+};
+
+const transactions = [ new Transaction(1, "deposit   ", 100.00), new Transaction(2, "deposit   ", 200.00) ];
 const users = [new User(1, "Rashaad", "Gray", "rgray", "password", "0123", 100.00), new User(2, "John", "Doe", "jdoe", "pass", "1234", 200.00) ];
 let user = new User();
 let loggedIn = false;
-console.log("DOLLARSBANK ATM WELCOMES YOU!!!");
+console.log(Color.blue + "DOLLARSBANK ATM WELCOMES YOU!!!" + Color.reset);
 startMenu();
 
 function main()
@@ -42,12 +56,13 @@ function main()
     while(run == true)
     {
         mainMenu();
-        option = prompt("Choice: ");
+        option = prompt(Color.blue + "Choice: " + Color.yellow);
+        console.log(Color.reset);
 
         switch (option)
         {
             case "1":
-                console.log("Your current balance: $" + user.cash);
+                console.log("Your current balance: " + Color.green + "$" + Color.blue + user.cash);
                 break;
             case "2":
                 printTransactions();
@@ -72,7 +87,7 @@ function main()
                 run = false;
                 user = new User();
                 loggedIn = false;
-                console.log("... Signing Out ...");
+                console.log(Color.whiteBackground + Color.green + "... Signing Out ..." + Color.reset);
                 break;
             default:
                 console.log("... invalid option ...");
@@ -87,10 +102,11 @@ function startMenu()
     {
         while (loggedIn != true)
         {
-            console.log("1) login");
-            console.log("2) SignUp");
-            console.log("3) Exit");
-            option = prompt("Choice: ");
+            console.log(Color.yellow + "1" + Color.red + ")" + Color.cyan + " login");
+            console.log(Color.yellow + "2" + Color.red + ")" + Color.cyan + " SignUp");
+            console.log(Color.yellow + "3" + Color.red + ")" + Color.cyan + " Exit");
+            option = prompt(Color.blue + "Choice: " + Color.yellow);
+            console.log(Color.reset);
 
             switch (option)
             {
@@ -111,18 +127,18 @@ function startMenu()
         }
         main();
     }
-    console.log("... Exiting System ...");
+    console.log(Color.whiteBackground + Color.green + "... Exiting System ..." + Color.reset);
 
 }
 
 function logInMenu()
 {
     var count = 0;
-    userName = prompt("Enter username: ");
+    userName = prompt(Color.magenta + "Enter username: " + Color.reset);
     users.forEach(u => {
         if(u.userName == userName )
         {
-            userPassword = prompt("Enter password: ");
+            userPassword = prompt(Color.magenta + "Enter password: " + Color.reset);
             count = 1;
             if (userPassword == u.password)
             {
@@ -133,13 +149,13 @@ function logInMenu()
             }
             else
             {
-                console.log("Incorrect Password!!");
+                console.log(Color.red + "Incorrect Password!!" + Color.reset);
             }
         }
     });
     if (count == 0)
     {
-        console.log("Incorrect username!!");
+        console.log(Color.red + "Incorrect username!!" + Color.reset);
     }
 }
 
@@ -155,66 +171,66 @@ function setUser(id)
 
 function mainMenu()
 {
-    console.log("1) Check Balance");
-    console.log("2) Print 5 recent Transactions");
-    console.log("3) Update PIN");
-    console.log("4) Withdraw Amount");
-    console.log("5) Deposit Amount");
-    console.log("6) Display Account Information");
-    console.log("7) Transfer Funds");
-    console.log("X) LogOut");
+    console.log(Color.yellow + "1" + Color.red + ")" + Color.cyan + " Check Balance");
+    console.log(Color.yellow + "2" + Color.red + ")" + Color.cyan + " Print 5 recent Transactions");
+    console.log(Color.yellow + "3" + Color.red + ")" + Color.cyan + " Update PIN");
+    console.log(Color.yellow + "4" + Color.red + ")" + Color.cyan + " Withdraw Amount");
+    console.log(Color.yellow + "5" + Color.red + ")" + Color.cyan + " Deposit Amount");
+    console.log(Color.yellow + "6" + Color.red + ")" + Color.cyan + " Display Account Information");
+    console.log(Color.yellow + "7" + Color.red + ")" + Color.cyan + " Transfer Funds");
+    console.log(Color.yellow + "X" + Color.red + ")" + Color.cyan + " LogOut");
 }
 
 function deposit()
 {
-    var newDeposit = parseFloat(prompt("Amount to deposit: $"));
-    if (newDeposit < 1.00 )
+    var newDeposit = parseFloat(prompt(Color.magenta + "Amount to deposit: " + Color.green + "$" + Color.blue));
+    if (newDeposit < 1.00 || isNaN(newDeposit) == true)
     {
-        console.log("Deposit can't be less than $1.00");
+        console.log(Color.red + "Deposit can't be less than $1.00");
     }
     else
     {
         user.cash += newDeposit;
-        console.log("Your new balance is: $" + user.cash);
-        updateTransactions(user.id, "deposit", newDeposit);
+        console.log(Color.reset + "Your new balance is: " + Color.green + "$" + Color.blue + user.cash);
+        updateTransactions(user.id, "deposit   ", newDeposit);
     }
 }
 
 function withdraw()
 {
-    var amount = parseFloat(prompt("Amount to withdraw: $"));
-    if (amount > user.cash )
+    var amount = parseFloat(prompt(Color.magenta + "Amount to withdraw: " + Color.green + "$" + Color.blue));
+    if (amount > user.cash || amount < 0.00 || isNaN(amount) == true)
     {
-        console.log("withdraw can't be more than whats in account ($" + user.cash + ")");
+        console.log(Color.red + "withdraw can't be more than whats in account (" + Color.green + "$" + Color.blue + user.cash + Color.red + ") or Negative");
     }
     else
     {
         user.cash -= amount;
-        console.log("Your new balance is: $" + user.cash);
-        updateTransactions(user.id, "withdraw", amount);
+        console.log("Your new balance is: " + Color.green + "$" + Color.blue + user.cash);
+        updateTransactions(user.id, "withdraw  ", amount);
     }
 }
 
 function pinUpdate()
 {
-    var current = prompt("Enter current PIN: ");
+    var current = prompt(Color.magenta + "Enter current PIN: " + Color.reset);
     if (current == user.pin)
     {
         const regEx = /^\d\d\d\d$/;
-        var newPin = prompt("Enter new PIN: ");
+        var newPin = prompt(Color.magenta + "Enter new PIN: " + Color.reset);
         if (newPin.search(regEx) == 0)
         {
             user.pin = newPin;
-            console.log("Pin update successful!");
+            console.log("Pin update " + Color.green + "successful" + Color.reset + "!!!");
         }
         else
         {
-            console.log("Invalid format must match be 4-digit pin (ex. 0589)");
+            console.log(Color.red + "Invalid format must match be 4-digit pin (ex. 0589)" + Color.reset);
         }
     }
     else
     {
-        console.log("INVALID PIN!!!");
+        console.log(Color.red + "INVALID PIN!!!" + Color.reset);
     }
 }
 
@@ -227,7 +243,8 @@ function printTransactions()
         if (t[i].id == user.id)
         {
             count += 1;
-            console.log("TimeStamp: " + t[i].date, "| Category:", t[i].type, " | Amount: $" + t[i].amount);
+            console.log(Color.white + "TimeStamp: " + Color.blue + t[i].date, Color.yellow + 
+            "|" + Color.white + " Category:", Color.blue + t[i].type, Color.yellow + "|" + Color.white + " Amount: " + Color.green + "$" + Color.blue + t[i].amount);
             if (count >= 5)
             {
                 return;
@@ -243,32 +260,31 @@ function updateTransactions(id, type, amount)
 
 function accInfo()
 {
-    console.log("First Name:", user.firstName)
-    console.log("Last Name: ", user.lastName)
-    console.log("Username:  ", userName)
-    console.log("PIN:       ", user.pin)
-    console.log("Balance:   ", user.cash)
+    console.log(Color.magenta + "First Name:" + Color.reset, user.firstName)
+    console.log(Color.magenta + "Last Name: " + Color.reset, user.lastName)
+    console.log(Color.magenta + "Username:  " + Color.reset, userName)
+    console.log(Color.magenta + "PIN:       " + Color.reset, user.pin)
+    console.log(Color.magenta + "Balance:   ", Color.green + "$" + Color.blue + user.cash)
 }
 
 function transferFunds()
 {
-    let other =  prompt("Username to transfer to: ");
+    let other =  prompt(Color.magenta + "Username to transfer to: " + Color.reset);
     users.forEach(u => {
         if(u.userName.toLowerCase() == other.toLowerCase())
         {
-            console.log("other:", other);
-            var transfer = parseFloat(prompt("Amount to transfer: $"));
-            if (transfer > user.cash  || transfer < 0)
+            var transfer = parseFloat(prompt(Color.magenta + "Amount to transfer: " + Color.green + "$" + Color.blue));
+            if (transfer > user.cash  || transfer < 0 || isNaN(transfer) == true)
             {
-                console.log("Transfer can't be more than whats in account ($" + user.cash + ") or Negative");
+                console.log(Color.red + "Transfer can't be more than whats in account (" + Color.green +"$" + user.cash + Color.red + ") or Negative");
             }
             else
             {
                 user.cash -= transfer;
                 u.cash += transfer
-                console.log("Your new balance is: $" + user.cash);
+                console.log(Color.reset + "Your new balance is: " + Color.green + "$" + Color.blue + user.cash);
                 updateTransactions(user.id, "transfered", transfer);
-                updateTransactions(u.id, "recived", transfer);
+                updateTransactions(u.id, "recived   ", transfer);
             }
         }
     });
@@ -277,11 +293,11 @@ function transferFunds()
 function SignUpMenu()
 {
     let pass = false;
-    var firstName =  prompt("Enter First Name: ");
-    var lastName =  prompt("Enter Last Name: ");
+    var firstName =  prompt(Color.magenta + "Enter First Name: " + Color.reset);
+    var lastName =  prompt(Color.magenta + "Enter Last Name: " + Color.reset);
     while (pass == false)
     {
-        var userName =  prompt("Enter username: ");
+        var userName =  prompt(Color.magenta + "Enter username: " + Color.reset);
         pass = true;
         users.forEach((u) => { if(u.userName.toLowerCase() == userName.toLowerCase()){ pass = false;
             console.log("Username (" + userName + ") is already taken") } });
@@ -290,7 +306,7 @@ function SignUpMenu()
     const regEx = /^ +$/;
     while (pass == false)
     {
-        var password =  prompt("Enter password: ");
+        var password =  prompt(Color.magenta + "Enter password: " + Color.reset);
         if(password == "" || password.search(regEx) == 0)
         {
             console.log("password can't be empty");
@@ -302,7 +318,7 @@ function SignUpMenu()
     pinRegEx = /^\d\d\d\d$/;
     while (pass == false)
     {
-        var newPin = prompt("Enter 4-digit PIN: ");
+        var newPin = prompt(Color.magenta + "Enter 4-digit PIN: " + Color.reset);
         if (newPin.search(pinRegEx) == 0)
         {
             pass = true;
@@ -315,8 +331,8 @@ function SignUpMenu()
     pass = false;
     while (pass == false)
     {
-        var newDeposit = parseFloat(prompt("Amount to deposit: $"));
-        if (newDeposit > 1.00 )
+        var newDeposit = parseFloat(prompt(Color.magenta + "Amount to deposit: " + Color.green + "$" + Color.reset));
+        if (newDeposit >= 1.00 )
         {
             pass = true;
         }
@@ -329,9 +345,9 @@ function SignUpMenu()
     users.push(newUser);
     if (users.slice().reverse()[0].id == newUser.id)
     {
-        transactions.push( new Transaction(newUser.id, "deposit", newUser.cash) );
-        console.log("Account creation successful!!")
+        transactions.push( new Transaction(newUser.id, "deposit   ", newUser.cash) );
+        console.log("Account creation " + Color.green + "success" + Color.reset + "!!!");
     }
     else
-        console.log("Error creation FAILED!!")
+        console.log("Error creation " + Color.red + "FAILED" + Color.reset + "!!!");
 }
